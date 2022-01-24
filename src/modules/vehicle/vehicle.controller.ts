@@ -19,6 +19,11 @@ export class VehicleController {
 		private vehicleReaderService: VehicleReaderService,
 	) {}
 
+	@Get()
+	findAll(): Promise<Vehicle[]> {
+		return this.vehicleReaderService.findAll();
+	}
+
 	@Get('/:id')
 	findVehicle(@Param() id: string): Promise<Vehicle> {
 		return this.vehicleReaderService.findById(id);

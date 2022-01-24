@@ -17,10 +17,16 @@ export class VehicleReaderService extends SecureService {
 	}
 
 	async findById(id: string): Promise<Vehicle> {
-		const vehicle = await this.repository.getOne(id);
+		const vehicle = await this.repository.getOneVehicle(id);
 		if (!vehicle) {
 			throw ExceptionVehicleNotFound();
 		}
 		return vehicle;
+	}
+
+	async findAll(): Promise<Vehicle[]> {
+		return this.run(async () => {
+			return this.repository.getAllVehicles();
+		}, ExceptionUntreatedVehicleReader);
 	}
 }

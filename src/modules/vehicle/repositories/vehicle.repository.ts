@@ -4,11 +4,11 @@ import { CreateVehicleDTO } from '../dto/create-vehicle.dto';
 
 @EntityRepository(Vehicle)
 export class VehicleRepository extends Repository<Vehicle> {
-	async getOne(id): Promise<Vehicle> {
-		return this.findOne(id);
+	async getAllVehicles(): Promise<Vehicle[]> {
+		return this.find();
 	}
-	async getAll(): Promise<Vehicle[]> {
-		return [];
+	async getOneVehicle(id): Promise<Vehicle> {
+		return this.findOne(id);
 	}
 	async createVehicle(createVehicleDTO: CreateVehicleDTO): Promise<Vehicle> {
 		const { title, description, model, year } = createVehicleDTO;
