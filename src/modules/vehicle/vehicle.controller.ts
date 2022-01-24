@@ -7,9 +7,8 @@ import {
 	Body,
 	Put,
 } from '@nestjs/common';
-import { CreateVehicleDTO } from './dto/create-vehicle.dto';
 import { Vehicle } from './entity/vehicle.entity';
-import { UpdateVehicleDTO } from './dto/update-vehicle.dto';
+import { CreateVehicleDTO, UpdateVehicleDTO } from './dto/';
 import { VehicleService } from './services/vehicle.service';
 
 @Controller('vehicles')
