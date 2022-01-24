@@ -5,32 +5,42 @@ import {
 	Delete,
 	Param,
 	Body,
-	Query,
+	Put,
 } from '@nestjs/common';
-import { VehicleCreatorService } from './services/vehicle.creator.service';
-import { VehicleReaderService } from './services/vehicle.reader.service';
 import { CreateVehicleDTO } from './dto/create-vehicle.dto';
 import { Vehicle } from './entity/vehicle.entity';
+import { UpdateVehicleDTO } from './dto/update-vehicle.dto';
+import { VehicleService } from './services/vehicle.service';
 
 @Controller('vehicles')
 export class VehicleController {
-	constructor(
-		private vehicleCreatorService: VehicleCreatorService,
-		private vehicleReaderService: VehicleReaderService,
-	) {}
+	constructor(private vehicleService: VehicleService) {}
 
 	@Get()
 	findAll(): Promise<Vehicle[]> {
-		return this.vehicleReaderService.findAll();
+		return this.vehicleService.list();
 	}
 
 	@Get('/:id')
 	findVehicle(@Param() id: string): Promise<Vehicle> {
-		return this.vehicleReaderService.findById(id);
+		return this.vehicleService.findById(id);
 	}
 
 	@Post()
 	createVehicle(@Body() createVehicleDTO: CreateVehicleDTO) {
-		return this.vehicleCreatorService.exec(createVehicleDTO);
+		return this.vehicleService.create(createVehicleDTO);
+	}
+
+	@Delete('/:id')
+	deleteVehicle(@Param() id: string): Promise<Vehicle> {
+		return this.vehicleService.delete(id);
+	}
+
+	@Put('/:id')
+	updateVehicle(
+		@Param() id: string,
+		@Body() updateVehicleDTO: UpdateVehicleDTO,
+	): Promise<Vehicle> {
+		return this.vehicleService.update(id, updateVehicleDTO);
 	}
 }

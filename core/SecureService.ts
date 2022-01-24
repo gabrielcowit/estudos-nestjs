@@ -7,8 +7,10 @@ export class SecureService {
 			const response = await runnable();
 			return response;
 		} catch (err) {
-			if (err instanceof HttpError) error;
-			throw error(err.message);
+			if (err instanceof HttpError) {
+				error;
+			}
+			throw error(err.message, err.status);
 		}
 	}
 }
