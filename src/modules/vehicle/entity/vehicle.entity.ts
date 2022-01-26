@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../../user/entity/user.entity';
 
 @Entity()
 export class Vehicle {
@@ -16,4 +17,7 @@ export class Vehicle {
 
 	@Column()
 	year: number;
+
+	@ManyToOne((_type) => User, (user) => user.vehicles, { eager: false })
+	user: User;
 }
