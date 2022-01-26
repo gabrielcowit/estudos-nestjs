@@ -2,9 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { VehicleModule } from './modules/vehicle/vehicle.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 @Module({
 	imports: [
 		VehicleModule,
+		UserModule,
+		AuthModule,
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: 'localhost',
@@ -16,7 +20,5 @@ import { VehicleModule } from './modules/vehicle/vehicle.module';
 			synchronize: true, // always keep your db schema in sync
 		}),
 	],
-	controllers: [],
-	providers: [],
 })
 export class AppModule {}

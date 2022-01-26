@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HasherService } from '../auth/services/hasher.service';
 import { UserRepository } from './repositories/user.repository';
 import { UserService } from './services';
-import { AuthenticatorService } from './services/authenticator.service';
 import { UserReaderService } from './services/user.reader.service';
 import { UserWriterService } from './services/user.writer.service';
 import { UserController } from './user.controller';
@@ -12,8 +12,9 @@ import { UserController } from './user.controller';
 		UserService,
 		UserWriterService,
 		UserReaderService,
-		AuthenticatorService,
+		HasherService,
 	],
 	controllers: [UserController],
+	exports: [HasherService, UserWriterService, UserReaderService],
 })
 export class UserModule {}
