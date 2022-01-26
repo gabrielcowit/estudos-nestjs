@@ -6,12 +6,15 @@ import {
 	Param,
 	Body,
 	Put,
+	UseGuards,
 } from '@nestjs/common';
 import { Vehicle } from './entity/vehicle.entity';
 import { CreateVehicleDTO, UpdateVehicleDTO } from './dto/';
 import { VehicleService } from './services/vehicle.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('vehicles')
+@UseGuards(AuthGuard())
 export class VehicleController {
 	constructor(private vehicleService: VehicleService) {}
 
@@ -26,6 +29,7 @@ export class VehicleController {
 	}
 
 	@Post()
+	@UseGuards(AuthGuard())
 	createVehicle(@Body() createVehicleDTO: CreateVehicleDTO) {
 		return this.vehicleService.create(createVehicleDTO);
 	}

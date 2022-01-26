@@ -8,6 +8,8 @@ import { ExceptionUntreatedUserCreator } from '@/src/trace/errors/user';
 import { LoginDTO } from '../dto/login.dto';
 import { UserReaderService } from '../../user/services/user.reader.service';
 import { User } from '../../user/entity/user.entity';
+import { TokenizerService } from './tokenizer.service';
+import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthenticatorService extends SecureService {
@@ -16,13 +18,18 @@ export class AuthenticatorService extends SecureService {
 		private repository: UserRepository,
 		private userWriterService: UserWriterService,
 		private userReaderService: UserReaderService,
+		private tokenizerService: TokenizerService,
 	) {
 		super();
 	}
 
-	async login(loginDTO: LoginDTO): Promise<User> {
+	async login(loginDTO: LoginDTO): Promise<{ token: string }> {
 		return this.run(async () => {
-			return this.userReaderService.loginOrFail(loginDTO);
+			const user = await this.userReaderService.loginOrFail(loginDTO);
+			const { id } = user;
+			const payload: IJwtPayload = { id };
+			const token = await this.tokenizerService.generateToken(payload);
+			return { token };
 		});
 	}
 

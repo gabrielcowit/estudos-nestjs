@@ -6,9 +6,10 @@ import { VehicleDeleteService } from './services/vehicle.delete.service';
 import { VehicleRepository } from './repositories/vehicle.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehicleService } from './services/vehicle.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([VehicleRepository])],
+	imports: [TypeOrmModule.forFeature([VehicleRepository]), AuthModule],
 	providers: [
 		VehicleService,
 		VehicleWriterService,
