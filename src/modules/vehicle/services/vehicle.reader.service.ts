@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { SecureService } from '@/core/SecureService';
 import { VehicleRepository } from '../repositories/vehicle.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class VehicleReaderService extends SecureService {
 		super();
 	}
 
-	async findById(id: string): Promise<Vehicle> {
+	async findOrFailById(id: string): Promise<Vehicle> {
 		const vehicle = await this.repository.getOneVehicle(id);
 		if (!vehicle) {
 			throw ExceptionVehicleNotFound();

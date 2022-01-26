@@ -10,33 +10,41 @@ import {
 } from '@nestjs/common';
 import { Vehicle } from './entity/vehicle.entity';
 import { CreateVehicleDTO, UpdateVehicleDTO } from './dto/';
-import { VehicleService } from './services/vehicle.service';
 import { AuthGuard } from '@nestjs/passport';
+import {
+	VehicleDeleteService,
+	VehicleReaderService,
+	VehicleWriterService,
+} from './services';
 
 @Controller('vehicles')
 @UseGuards(AuthGuard())
 export class VehicleController {
-	constructor(private vehicleService: VehicleService) {}
+	constructor(
+		private vehicleWriterService: VehicleWriterService,
+		private vehicleReaderService: VehicleReaderService,
+		private vehicleDeleteService: VehicleDeleteService,
+	) {}
 
 	@Get()
 	findAll(): Promise<Vehicle[]> {
-		return this.vehicleService.list();
+		return this.vehicleReaderService.findAll();
 	}
 
 	@Get('/:id')
 	findVehicle(@Param() id: string): Promise<Vehicle> {
-		return this.vehicleService.findById(id);
+		return this.vehicleReaderService.findOrFailById(id);
 	}
 
 	@Post()
 	@UseGuards(AuthGuard())
 	createVehicle(@Body() createVehicleDTO: CreateVehicleDTO) {
-		return this.vehicleService.create(createVehicleDTO);
+		return this.vehicleWriterService.createVehicle(createVehicleDTO);
 	}
 
 	@Delete('/:id')
 	deleteVehicle(@Param() id: string): Promise<Vehicle> {
-		return this.vehicleService.delete(id);
+		return this.vehicleDeleteService.deleteVehicle(id);
 	}
 
 	@Put('/:id')
@@ -44,6 +52,6 @@ export class VehicleController {
 		@Param() id: string,
 		@Body() updateVehicleDTO: UpdateVehicleDTO,
 	): Promise<Vehicle> {
-		return this.vehicleService.update(id, updateVehicleDTO);
+		return this.vehicleWriterService.updateVehicle(id, updateVehicleDTO);
 	}
 }

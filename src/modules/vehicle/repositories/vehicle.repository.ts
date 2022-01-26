@@ -27,10 +27,11 @@ export class VehicleRepository extends Repository<Vehicle> {
 		vehicle: Vehicle,
 		updateVehicleDTO: UpdateVehicleDTO,
 	): Promise<Vehicle> {
-		vehicle.description = updateVehicleDTO.description;
-		vehicle.title = updateVehicleDTO.title;
-		vehicle.year = updateVehicleDTO.year;
-		vehicle.model = updateVehicleDTO.model;
+		const { description, title, year, model } = updateVehicleDTO;
+		vehicle.description = description;
+		vehicle.title = title;
+		vehicle.year = year;
+		vehicle.model = model;
 		await this.save(vehicle);
 
 		return vehicle;
