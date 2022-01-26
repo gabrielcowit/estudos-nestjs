@@ -16,6 +16,8 @@ import {
 	VehicleReaderService,
 	VehicleWriterService,
 } from './services';
+import { getUser } from '../auth/get-user.decorator';
+import { User } from '../user/entity/user.entity';
 
 @Controller('vehicles')
 @UseGuards(AuthGuard())
@@ -27,31 +29,44 @@ export class VehicleController {
 	) {}
 
 	@Get()
-	findAll(): Promise<Vehicle[]> {
-		return this.vehicleReaderService.findAll();
+	findAll(@getUser() user: User): Promise<Vehicle[]> {
+		return this.vehicleReaderService.findAll(user);
 	}
 
 	@Get('/:id')
-	findVehicle(@Param() id: string): Promise<Vehicle> {
-		return this.vehicleReaderService.findOrFailById(id);
+	findVehicle(
+		@getUser() user: User,
+		@Param('id') id: string,
+	): Promise<Vehicle> {
+		return this.vehicleReaderService.findOrFailById(user, id);
 	}
 
 	@Post()
-	@UseGuards(AuthGuard())
-	createVehicle(@Body() createVehicleDTO: CreateVehicleDTO) {
-		return this.vehicleWriterService.createVehicle(createVehicleDTO);
+	createVehicle(
+		@Body() createVehicleDTO: CreateVehicleDTO,
+		@getUser() user: User,
+	) {
+		return this.vehicleWriterService.createVehicle(user, createVehicleDTO);
 	}
 
 	@Delete('/:id')
-	deleteVehicle(@Param() id: string): Promise<Vehicle> {
-		return this.vehicleDeleteService.deleteVehicle(id);
+	deleteVehicle(
+		@getUser() user: User,
+		@Param('id') id: string,
+	): Promise<Vehicle> {
+		return this.vehicleDeleteService.deleteVehicle(id, user);
 	}
 
 	@Put('/:id')
 	updateVehicle(
-		@Param() id: string,
+		@getUser() user: User,
+		@Param('id') id: string,
 		@Body() updateVehicleDTO: UpdateVehicleDTO,
 	): Promise<Vehicle> {
-		return this.vehicleWriterService.updateVehicle(id, updateVehicleDTO);
+		return this.vehicleWriterService.updateVehicle(
+			id,
+			user,
+			updateVehicleDTO,
+		);
 	}
 }

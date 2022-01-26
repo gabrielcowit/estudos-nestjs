@@ -5,6 +5,7 @@ import { CreateVehicleDTO, UpdateVehicleDTO } from '../dto/';
 import { ExceptionUntreatedVehicleCreator } from '@/src/trace/errors/vehicle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehicleReaderService } from '.';
+import { User } from '../../user/entity/user.entity';
 
 @Injectable()
 export class VehicleWriterService extends SecureService {
@@ -17,17 +18,25 @@ export class VehicleWriterService extends SecureService {
 		super();
 	}
 
-	async createVehicle(createVehicleDTO: CreateVehicleDTO) {
+	async createVehicle(user: User, createVehicleDTO: CreateVehicleDTO) {
 		return this.run(async () => {
-			return this.vehicleRepository.createVehicle(createVehicleDTO);
+			return this.vehicleRepository.createVehicle(user, createVehicleDTO);
 		}, ExceptionUntreatedVehicleCreator);
 	}
 
-	async updateVehicle(id: string, updateVehicleDTO: UpdateVehicleDTO) {
+	async updateVehicle(
+		id: string,
+		user: User,
+		updateVehicleDTO: UpdateVehicleDTO,
+	) {
 		return this.run(async () => {
-			const vehicle = await this.vehicleReaderService.findOrFailById(id);
+			const vehicle = await this.vehicleReaderService.findOrFailById(
+				user,
+				id,
+			);
 			return this.vehicleRepository.updateVehicle(
 				vehicle,
+				user,
 				updateVehicleDTO,
 			);
 		});
