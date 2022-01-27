@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Vehicle } from '../entity/vehicle.entity';
 import { CreateVehicleDTO, UpdateVehicleDTO } from '../dto';
 import { User } from '../../user/entity/user.entity';
-import { getUser } from '../../auth/get-user.decorator';
+import { ExceptionVehicleNotFound } from '@/src/trace/errors/vehicle';
 
 @EntityRepository(Vehicle)
 export class VehicleRepository extends Repository<Vehicle> {
@@ -10,8 +10,12 @@ export class VehicleRepository extends Repository<Vehicle> {
 		return this.find({ user });
 	}
 	async getOneVehicle(user: User, id: string): Promise<Vehicle> {
-		return this.findOne({ where: { id, user } });
 		//return this.findOne({ id, user }); it will works too
+		const vehicle = await this.findOne({ where: { id, user } });
+		if (!vehicle) {
+			ExceptionVehicleNotFound();
+		}
+		return vehicle;
 	}
 	async deleteVehicle(id: string, user: User): Promise<any> {
 		return this.delete({ id, user });

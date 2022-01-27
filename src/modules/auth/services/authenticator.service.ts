@@ -10,6 +10,7 @@ import { UserReaderService } from '../../user/services/user.reader.service';
 import { User } from '../../user/entity/user.entity';
 import { TokenizerService } from './tokenizer.service';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
+import { SignUpTransactionDTO } from '../dto/signup-transaction.dto';
 
 @Injectable()
 export class AuthenticatorService extends SecureService {
@@ -35,7 +36,20 @@ export class AuthenticatorService extends SecureService {
 
 	async singup(signUpDTO: SignUpDTO): Promise<void> {
 		await this.run(async () => {
-			return this.userWriterService.signup(signUpDTO);
+			return; //return this.userWriterService.signup(signUpDTO);
+		}, ExceptionUntreatedUserCreator);
+	}
+
+	async singupTransaction(
+		signUpTransactionDTO: SignUpTransactionDTO,
+	): Promise<void> {
+		await this.run(async () => {
+			const { username, password, cars } = signUpTransactionDTO;
+			return this.userWriterService.create({
+				username,
+				password,
+				cars,
+			});
 		}, ExceptionUntreatedUserCreator);
 	}
 }

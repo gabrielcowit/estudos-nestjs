@@ -18,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
 			database: 'shopping-car',
 			autoLoadEntities: true,
 			synchronize: true, // always keep your db schema in sync
+			logging: true,
 		}),
 	],
 })

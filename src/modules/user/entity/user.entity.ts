@@ -12,6 +12,9 @@ export class User {
 	@Column()
 	password: string;
 
-	@OneToMany((_type) => Vehicle, (vehicle) => vehicle.user, { eager: false })
+	@OneToMany((_type) => Vehicle, (vehicle) => vehicle.user, {
+		eager: false,
+		cascade: ['insert'],
+	})
 	vehicles: Vehicle[];
 }
